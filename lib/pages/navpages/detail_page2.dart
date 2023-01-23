@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:ui';
 
 
@@ -8,11 +9,13 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import '../../misc/colors.dart';
+import '../../misc/event_details.dart';
 import '../../misc/event_details_firebase.dart';
 import '../../widget/app_button.dart';
 import '../../widget/app_text.dart';
 import '../../widget/responsive_button.dart';
 import 'my_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class detailPage2 extends StatelessWidget {
   String userName;
@@ -36,8 +39,12 @@ var thingNeeded=[
       required this.description,
       });
 
+  List<String> docIds = [];
+
+
   @override
   Widget build(BuildContext context) {
+
 
     return SafeArea(
         child: Scaffold(
@@ -50,19 +57,12 @@ var thingNeeded=[
       buttonArrow(context),
       scroll(),
     ])));
+
+    //tryDatabase trymain = new tryDatabase();
   }
 
   buttonArrow(BuildContext context) {
 
-//==========
-      List < String> docEventIds =[];
-  /*Future getDocId() async {
-    await FirebaseFirestore.instance.collection('haziqTest').get().then((value) => value.docs.forEach((element){
-      print(element.reference);
-    }),);
-  }*/
-
-  //========
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: InkWell(
@@ -276,50 +276,9 @@ var thingNeeded=[
     ],));
    
   }
-}
-
-class tryDatabase {
 
 
-   tryDatabase(
-      {Key? key,
-      });
-List<String> docIDs=[];
-
-   Future getDocsId() async {
-      await FirebaseFirestore.instance.collection('event').get().then((value)=>value.docs.forEach(
-        (element){
-        print(element.reference);
-        docIDs.add(element.reference.id);
-      }),
-      );
-      print('Hello3 World');
-
-    }
-
-    
-    void initState()
-    {
-      getDocsId();
-      print('hello 343');
-
-
-    }
-
-String tryn23 = 'sdwqdwqdwew';
-
-  dttd(){
-
-    print("hrllo world");
-    getDocsId();
-    return
-     detailPage2(userName: ' Emilia-chan',
-        title:"Volunteering T1",
-        description: tryn23,
-       location: 'Kajang, My',);
-
-    }
-    
 
 }
+
 

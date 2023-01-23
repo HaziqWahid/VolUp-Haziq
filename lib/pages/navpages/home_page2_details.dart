@@ -1,5 +1,6 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 
@@ -12,6 +13,7 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    getData();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -32,12 +34,38 @@ class Body extends StatelessWidget {
             crossAxisSpacing: AppColors.kDefaultPaddin,
             childAspectRatio: 0.75,
         ),
+       
         itemBuilder:(context, index)=> itemCard(eventList: event_info[index]),),
           ) )
       ],
     );
   }
 }
+
+
+CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection('event');
+
+
+  Future<void> getData() async {
+    List<Map> eventList = [];
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await _collectionRef.get();
+
+    // Get data from docs and convert map to List
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    //final allData = querySnapshot.docs.map((doc) => doc.data());
+
+    for (int i = 0; i < querySnapshot.docs.length; i++) {
+      var a = Map<String, dynamic>.from(querySnapshot.docs[i].data() as Map);
+      eventList.add(a);
+    }
+
+    //var data = Map<String, dynamic>.from(querySnapshot.docs[1].data() as Map);
+    print(eventList.length);
+
+    }
+
 
 class itemCard extends StatelessWidget {
   final EventDetails eventList;
@@ -61,7 +89,7 @@ class itemCard extends StatelessWidget {
              decoration: BoxDecoration(
               color: AppColors.outline,
               borderRadius: BorderRadius.circular(16)),
-              child: Image.asset(eventList.picture),
+              child: Image.asset(eventList.image),
              ),
         ),
            Padding(

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../misc/colors.dart';
 import '../../misc/event_details.dart';
+import 'detail_page2.dart';
 
 
 class Body extends StatelessWidget {
@@ -13,7 +14,6 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getData();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -34,38 +34,12 @@ class Body extends StatelessWidget {
             crossAxisSpacing: AppColors.kDefaultPaddin,
             childAspectRatio: 0.75,
         ),
-       
         itemBuilder:(context, index)=> itemCard(eventList: event_info[index]),),
           ) )
       ],
     );
   }
 }
-
-
-CollectionReference _collectionRef =
-      FirebaseFirestore.instance.collection('event');
-
-
-  Future<void> getData() async {
-    List<Map> eventList = [];
-    // Get docs from collection reference
-    QuerySnapshot querySnapshot = await _collectionRef.get();
-
-    // Get data from docs and convert map to List
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    //final allData = querySnapshot.docs.map((doc) => doc.data());
-
-    for (int i = 0; i < querySnapshot.docs.length; i++) {
-      var a = Map<String, dynamic>.from(querySnapshot.docs[i].data() as Map);
-      eventList.add(a);
-    }
-
-    //var data = Map<String, dynamic>.from(querySnapshot.docs[1].data() as Map);
-    print(eventList.length);
-
-    }
-
 
 class itemCard extends StatelessWidget {
   final EventDetails eventList;
@@ -92,13 +66,37 @@ class itemCard extends StatelessWidget {
               child: Image.asset(eventList.image),
              ),
         ),
-           Padding(
-             padding: const EdgeInsets.symmetric(vertical: AppColors.kDefaultPaddin/4),
-             child: Text(eventList.title, style: TextStyle(color: AppColors.kTextLightColor),),
+           InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => detailPage2(
+        userName: ' Emilia-chan',
+        title:eventList.bankName,
+        description: ' Help us doing volunteering stuff and get reward from god',
+       location: 'Kajang, My', )),
+                );
+            },
+             child: Padding(
+               padding: const EdgeInsets.symmetric(vertical: AppColors.kDefaultPaddin/4),
+               child: Text(eventList.title, style: TextStyle(color: AppColors.kTextLightColor),),
+             ),
            ),
-           Text(eventList.location, style: TextStyle(fontWeight: FontWeight.bold),
+           InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => detailPage2(
+        userName: ' Emilia-chan',
+        title:eventList.bankName,
+        description: ' Help us doing volunteering stuff and get reward from god',
+       location: 'Kajang, My', )),
+                );
+            },
+           child:Text(eventList.location, style: TextStyle(fontWeight: FontWeight.bold),
+           
 
-           )
+           ),),
       ],
     );
   }
@@ -166,5 +164,5 @@ Widget buildCategory(int index)
 }
 
 
-}
 
+}

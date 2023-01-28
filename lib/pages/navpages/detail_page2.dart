@@ -1,34 +1,33 @@
-import 'dart:ffi';
+
 import 'dart:ui';
-
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import '../../misc/colors.dart';
-import '../../misc/event_details.dart';
-import '../../misc/event_details_firebase.dart';
 import '../../widget/app_button.dart';
-import '../../widget/app_text.dart';
 import '../../widget/responsive_button.dart';
 import 'my_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class detailPage2 extends StatelessWidget {
-  String userName;
-  String location;
-  String description;
-  String title;
+  final String userName;
+  final String location;
+  final String description;
+  final String title;
+final String bankName,
 
-//Trying only
-var thingNeeded=[
-  "Help to clear the floods",
-  "Help with washing citizen house",
-  "Foods",
-  "Water supply"];
+   bankAcc,
+ 
+   eventDate,
+  eventTime,
+  image,
+  ingredients1,ingredients2,ingredients3,
+
+  
+  needs1,
+  need2,
+  need3,
+  need4;
+
+  final double latitude,longitude;
+
 
 
   detailPage2(
@@ -37,6 +36,27 @@ var thingNeeded=[
       required this.userName,
       required this.location, 
       required this.description,
+      
+  required this.bankName,
+  required this.bankAcc,
+  required this.eventDate,
+ required this.eventTime,
+ required this.image,
+
+
+  required this.ingredients1,
+  required this.ingredients2,
+  required this.ingredients3,
+
+  required this.needs1,
+  required this.need2,
+  required this.need3,
+  required this.need4,
+
+
+  required this.longitude,
+  required this.latitude,
+    
       });
 
   List<String> docIds = [];
@@ -44,18 +64,26 @@ var thingNeeded=[
 
   @override
   Widget build(BuildContext context) {
+    //Trying only
+var thingNeeded=[
+  needs1,
+  need2,
+  need3,
+  need4];
 
+var ingredientList=[
+ ingredients1,ingredients2,ingredients3];
 
     return SafeArea(
         child: Scaffold(
             body: Stack(children: [
       SizedBox(
         width: 400,
-        child: Image.asset("images/mountain.jpeg"),
+        child: Image.network(image),
       ),
     
       buttonArrow(context),
-      scroll(),
+      scroll(thingNeeded,ingredientList),
     ])));
 
     //tryDatabase trymain = new tryDatabase();
@@ -95,7 +123,7 @@ var thingNeeded=[
     );
   }
 
-  scroll() {
+  scroll(var thingNeeded, var ingredientList) {
     return DraggableScrollableSheet(
         initialChildSize: 0.6,
         maxChildSize: 1.0,
@@ -203,14 +231,14 @@ var thingNeeded=[
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: thingNeeded.length,
-                        itemBuilder: (context, index)=> Needs(context, index)),
+                        itemBuilder: (context, index)=> Needs(context, index,thingNeeded)),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 15),
                         child: Divider(
                           height:4,),
                       ),
                        Text(
-                        "Ingredients",
+                        "Objective",
                         style: Theme.of(context).textTheme.headline4,
                       ),
                                             const SizedBox(height:10),
@@ -218,7 +246,7 @@ var thingNeeded=[
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: 3,
-                        itemBuilder: (context, index)=> steps(context, index)),
+                        itemBuilder: (context, index)=> steps(context, index, ingredientList)),
 
                         const SizedBox(height:10,),
                         Row(
@@ -237,7 +265,8 @@ var thingNeeded=[
   }
 
   // thing that we need for the event
-  Needs(BuildContext context,index) {
+  Needs(BuildContext context,index, var thingNeeded) {
+
     return Padding(padding: const EdgeInsets.symmetric( vertical: 10), child: Row(children: [
       const CircleAvatar( radius:10, backgroundColor:  Color(0xffe3fff8),
     child: Icon(Icons.done,size:15,color:AppColors.primary2 )),
@@ -248,7 +277,7 @@ var thingNeeded=[
     );
   }
   
-  steps(BuildContext context, int index) {
+  steps(BuildContext context, int index,var ingredientList) {
     return Padding(padding: 
     const EdgeInsets.symmetric(vertical:20),
     child: Row(
@@ -265,7 +294,7 @@ var thingNeeded=[
         SizedBox(
           width: 270,
           child: Text(
-            "Your recipe has been uploaded, you can see it on your profile", // <-- can change depen on the index
+            ingredientList[index], // <-- can change depen on the index
             maxLines:3,
             style: Theme.of(context).textTheme.bodyText2!.copyWith(color:AppColors.mainText),
           ),

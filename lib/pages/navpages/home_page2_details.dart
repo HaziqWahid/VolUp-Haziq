@@ -5,101 +5,246 @@ import 'package:flutter/material.dart';
 
 
 import '../../misc/colors.dart';
-import '../../misc/event_details.dart';
+import 'detail_page2.dart';
+import 'donations.dart';
 
 
 class Body extends StatelessWidget {
+  
   const Body({super.key});
+  
+ 
+  
 
   @override
   Widget build(BuildContext context) {
-    getData();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal:AppColors.kDefaultPaddin ),
-          child: Text("Volunteering Event", style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight:FontWeight.bold)),
-        ),
-        Categories(),
-        Expanded(
+
+    return 
+        Scaffold(
+          body:StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('event')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  final event = snapshot.data?.docs;
+
+                  print("====================================");
+
+                  print("event length ${event?.length}");
+                  print(event![1]["Bank Name"]);
+                  return
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:AppColors.kDefaultPaddin ),
+                  child: Text("Volunteering Event", style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight:FontWeight.bold), selectionColor: Color.fromARGB(255, 76, 1, 122),),
+                ),
+                Categories(),
+
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: AppColors.kDefaultPaddin),
+                    child: GridView.builder(
+                      itemCount: event.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount:2,
+                    mainAxisSpacing: AppColors.kDefaultPaddin,
+                    crossAxisSpacing: AppColors.kDefaultPaddin,
+                    childAspectRatio: 0.75,
+                ),
+
+                
+                itemBuilder:(context, index) => itemCard( 
+   bankName:event[index]["Bank Name"],
+   bankAcc:event[index]["Bank Account"],
+   description:event[index]["description"],
+   eventDate:event[index]["event date"],
+  eventTime:event[index]["event time"],
+  image:event[index]["image"],
+  ingredients1:event[index]["ingredient 1"],
+  ingredients2:event[index]["ingredient 2"],
+  ingredients3:event[index]["ingredient 3"],
+  location:event[index]["location"],
+  
+  needs1:event[index]["needs 1"],
+  need2:event[index]["needs 2"],
+  need3:event[index]["needs 3"],
+  need4:event[index]["needs 4"],
+  organizer:event[index]["organizer"],
+   title:event[index]["title"],
+
+  latitude :event[index]["latitude"],
+  longitude:event[index]["longitude"],index: index)),
+                  ) )
+              ],
+            );}),
           
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppColors.kDefaultPaddin),
-            child: GridView.builder(
-              itemCount: event_info.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount:2,
-            mainAxisSpacing: AppColors.kDefaultPaddin,
-            crossAxisSpacing: AppColors.kDefaultPaddin,
-            childAspectRatio: 0.75,
-        ),
-       
-        itemBuilder:(context, index)=> itemCard(eventList: event_info[index]),),
-          ) )
-      ],
-    );
+        );
   }
 }
 
-
-CollectionReference _collectionRef =
-      FirebaseFirestore.instance.collection('event');
-
-
-  Future<void> getData() async {
-    List<Map> eventList = [];
-    // Get docs from collection reference
-    QuerySnapshot querySnapshot = await _collectionRef.get();
-
-    // Get data from docs and convert map to List
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    //final allData = querySnapshot.docs.map((doc) => doc.data());
-
-    for (int i = 0; i < querySnapshot.docs.length; i++) {
-      var a = Map<String, dynamic>.from(querySnapshot.docs[i].data() as Map);
-      eventList.add(a);
-    }
-
-    //var data = Map<String, dynamic>.from(querySnapshot.docs[1].data() as Map);
-    print(eventList.length);
-
-    }
-
-
 class itemCard extends StatelessWidget {
-  final EventDetails eventList;
+  //final EventDetails eventList;
+  final int index;
+
+  //final String id;
+   final String bankName,
+   bankAcc,
+   description,
+   eventDate,
+  eventTime,
+  image,
+  ingredients1,ingredients2,ingredients3,
+  location,
+  
+  needs1,
+  need2,
+  need3,
+  need4,
+  organizer,
+   title;
+
+  final double latitude,longitude;
+  
+  
   const itemCard({
     Key? key,
-    required this.eventList,
+    //required this.eventList,
+    required this.index,
+  required this.bankName,
+  required this.bankAcc,
+  required this.description,
+  required this.eventDate,
+ required this.eventTime,
+ required this.image,
+
+
+  required this.ingredients1,
+  required this.ingredients2,
+  required this.ingredients3,
+  required this.location,
+  required this.needs1,
+  required this.need2,
+  required this.need3,
+  required this.need4,
+
+required this.organizer,
+ required this.title,
+
+  required this.longitude,
+  required this.latitude,
     
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Container(
-            padding: EdgeInsets.all(AppColors.kDefaultPaddin),    
-        
-            //height: 180,
-             //width: 160,
-             decoration: BoxDecoration(
-              color: AppColors.outline,
-              borderRadius: BorderRadius.circular(16)),
-              child: Image.asset(eventList.image),
-             ),
-        ),
-           Padding(
-             padding: const EdgeInsets.symmetric(vertical: AppColors.kDefaultPaddin/4),
-             child: Text(eventList.title, style: TextStyle(color: AppColors.kTextLightColor),),
-           ),
-           Text(eventList.location, style: TextStyle(fontWeight: FontWeight.bold),
 
-           )
-      ],
+    return Scaffold(
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('users').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          //final event = snapshot.data?.docs;
+                  final gettingId = snapshot.data!.docs.firstWhere((doc) => doc.id == organizer).data() as Map<String, dynamic>;
+             // print("=====================");     
+            //print(gettingId["fullName"]);
+
+
+            //print(gettingId);
+            //print(event2['title']);
+          return
+        Column(
+
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [   
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(AppColors.kDefaultPaddin),    
+            
+               // height: 200,
+                 //width: 160,
+                 decoration: BoxDecoration(
+                  color: AppColors.outline,
+                  borderRadius: BorderRadius.circular(16)),
+                  child: Image.network(image),
+                 ),
+            ),
+               InkWell(
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => detailPage2(
+            userName: gettingId["fullName"],
+            title:title,
+            description: description,
+           location: location,
+           bankName: bankName,
+           bankAcc: bankAcc,
+           eventDate: eventDate,
+           eventTime: eventTime,
+           image: image,
+           ingredients1:ingredients1,
+           ingredients2:ingredients2,
+           ingredients3:ingredients3,
+           needs1: needs1,
+           need2: need2,
+           need3: need3,
+           need4:need4,
+           longitude:longitude,
+           latitude:latitude,
+
+           
+            )),
+                    );
+                },
+                 child: Padding(
+                   padding: const EdgeInsets.symmetric(vertical: AppColors.kDefaultPaddin/4),
+                   child: Text(eventDate, style: TextStyle(color: AppColors.kTextLightColor),),
+                 ),
+               ),
+               InkWell(
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => detailPage2(
+                      userName: gettingId["fullName"],
+            title:title,
+            description: description,
+           location: location,
+           bankName: bankName,
+           bankAcc: bankAcc,
+           eventDate: eventDate,
+           eventTime: eventTime,
+           image: image,
+           ingredients1:ingredients1,
+           ingredients2:ingredients2,
+           ingredients3:ingredients3,
+           needs1: needs1,
+           need2: need2,
+           need3: need3,
+           need4:need4,
+           longitude:longitude,
+           latitude:latitude,
+ )),
+                    );
+                },
+               child:Text(title, style: TextStyle(fontWeight: FontWeight.bold),
+               
+
+               ),),
+  ],
+        );}),
+      
     );
   }
 }
@@ -138,6 +283,13 @@ Widget buildCategory(int index)
     onTap:() {
       setState((){
         selectedIndex = index;
+        if(index==2)
+        {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Donation()),
+                );
+        }
       });
     },
     child: Padding(
@@ -156,7 +308,7 @@ Widget buildCategory(int index)
             margin: EdgeInsets.only(top: AppColors.kDefaultPaddin/4),
             height:2,
             width: 30,
-            color: selectedIndex == index? Colors.black: Colors.transparent,
+            color: selectedIndex == index? Color.fromARGB(255, 40, 4, 65): Colors.transparent,
           )
         ],
       ),
@@ -165,6 +317,7 @@ Widget buildCategory(int index)
 
 }
 
-
 }
 
+//
+       //           final gettingId = snapshot.data!.docs.firstWhere((doc) => doc.id == "the document Id").data() as Map<String, dynamic>;

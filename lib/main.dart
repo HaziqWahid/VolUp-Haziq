@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:temp_flutter3/pages/navpages/detail_page2.dart';
+
 import 'package:temp_flutter3/pages/navpages/home_page2.dart';
 
  Future main() async {
@@ -42,8 +42,10 @@ class MyApp extends StatelessWidget {
         description: ' Help us doing volunteering stuff and get reward from god',
        location: 'Kajang, My', ),*/
         
-      HomePage2(),
+    HomePage2(),
+      //Donation(),
     );
   }
 
 }
+

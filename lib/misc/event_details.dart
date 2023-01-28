@@ -2,6 +2,8 @@
 
 import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class EventDetails{
 
 String id;
@@ -128,8 +130,85 @@ required this.organizer,
 
 }
 
+
+List event_play=[];
+
+
+  Future<void> getData() async {
+
+CollectionReference _collectionRef =
+      FirebaseFirestore.instance.collection('event');
+
+    List<Map> eventList = [];
+
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await _collectionRef.get();
+
+    // Get data from docs and convert map to List
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    //final allData = querySnapshot.docs.map((doc) => doc.data());
+
+    for (int i = 0; i < querySnapshot.docs.length; i++) {
+      var a = Map<String, dynamic>.from(querySnapshot.docs[i].data() as Map);
+      eventList.add(a);
+    }
+
+    //var data = Map<String, dynamic>.from(querySnapshot.docs[1].data() as Map);
+    
+    //print(eventList[i]);
+    //List forReturn = [ eventList[i]['Bank Name'], eventList[i]['Organization']];
+
+    event_play.add( EventDetails(
+    id:"try1",
+   bankName:"try1",
+   bankAcc:"try1",
+   description:"try1",
+   eventDate:"try1",
+  eventTime:"try1",
+  image:"images/mountain.jpeg",
+  ingredients1:"try1",ingredients2:"try1",ingredients3:"try1",
+  location:"try1",
+  
+  needs1:"try1",
+  need2:"try1",
+  need3:"try1",
+  need4:"try1",
+  organizer:"try1",
+   title:"try1",
+
+  latitude :100.30024521052837,
+  longitude:100.30024521052837,));
+  event_play.add( EventDetails(
+    id:"try1",
+   bankName:"try1",
+   bankAcc:"try1",
+   description:"try1",
+   eventDate:"try1",
+  eventTime:"try1",
+  image:"images/mountain.jpeg",
+  ingredients1:"try1",ingredients2:"try1",ingredients3:"try1",
+  location:"try1",
+  
+  needs1:"try1",
+  need2:"try1",
+  need3:"try1",
+  need4:"try1",
+  organizer:"try1",
+   title:"try1",
+
+  latitude :100.30024521052837,
+  longitude:100.30024521052837,));
+    }
+
+//List<EventDetails> event_play=[];
+
+
 List<EventDetails> event_info=[
+
+
   EventDetails(
+
+  
     id:"try1",
    bankName:"try1",
    bankAcc:"try1",
@@ -152,7 +231,7 @@ List<EventDetails> event_info=[
   ),
     EventDetails(
     id:"try2",
-   bankName:"try1",
+   bankName:"try2",
    bankAcc:"try1",
    description:"try1",
    eventDate:"try1",
@@ -173,7 +252,7 @@ List<EventDetails> event_info=[
   ),
     EventDetails(
     id:"try3",
-   bankName:"try1",
+   bankName:"try3",
    bankAcc:"try1",
    description:"try1",
    eventDate:"try1",
@@ -267,4 +346,5 @@ List<EventDetails> event_info=[
       print(e.toString());
     }
   }
-}*/
+}
+*/
